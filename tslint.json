@@ -1,0 +1,18 @@
+{
+  "extends": ["tslint:recommended", "tslint-config-prettier"],
+  "rules": {
+    "curly": false,
+    "no-console": false,
+    "no-shadowed-variable": false,
+    "variable-name": false,
+    "only-arrow-functions": false,
+    "no-arg": false,
+    "object-literal-shorthand": false,
+    "function-constructor": false,
+    "max-classes-per-file": false,
+    "array-type": false,
+    "forin": false,
+    "no-string-literal": false,
+    "no-empty-interface": false
+  }
+}

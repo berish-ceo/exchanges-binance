@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "outDir": "./build",
+    "target": "es6",
+    "module": "commonjs",
+    "lib": ["es6", "dom"],
+    "declaration": true,
+    "sourceMap": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noUnusedLocals": false,
+    "strictNullChecks": false,
+    "noImplicitReturns": true,
+    "noImplicitThis": false,
+    "noImplicitAny": false,
+    "jsx": "react",
+    "esModuleInterop": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "**/__tests__/*"]
+}
