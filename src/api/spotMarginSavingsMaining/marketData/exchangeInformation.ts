@@ -66,7 +66,7 @@ interface ExchangeInformationResponseRaw {
 
 /**
  * Current exchange trading rules and symbol information
- * */
+ */
 export async function exchangeInformation(client: BinanceClient) {
   const response = await apiCall<ExchangeInformationResponseRaw>({
     host: 'spot',
