@@ -3,6 +3,7 @@ import axios, { AxiosInstance } from 'axios';
 
 import { spotMarginSavingsMaining } from '../api';
 import { CONST } from '../info';
+import { responseErrorInterceptor, responseUpdateXMBXUsedWeight } from '../interceptors';
 import { parseProxyAddress } from '../utils';
 
 export interface BinanceClientOptions {
@@ -23,7 +24,6 @@ export interface BinanceClientOptions {
 export class BinanceClient {
   public [CONST.SYMBOL_X_MBX_USED_WEIGHT]: number = null;
   protected _options: BinanceClientOptions = null;
-  private _lastProxyUsed: number = 0;
 
   constructor(options?: BinanceClientOptions) {
     if (options && typeof options !== 'object') throw new TypeError('BinanceClient options is not object');
@@ -37,11 +37,18 @@ export class BinanceClient {
     this._options.coinFuturesSocketEndpoint = this._options.coinFuturesSocketEndpoint || CONST.COINM_HOSTS.socketHost;
     this._options.vanillaApiEndpoint = this._options.vanillaApiEndpoint || CONST.VANILLA_HOSTS.baseHost;
     this._options.vanillaSocketEndpoint = this._options.vanillaSocketEndpoint || CONST.VANILLA_HOSTS.socketHost;
-    this._options.axios = axios.create();
+    this._options.axios = axios.create({ timeout: 10000 });
+
+    responseErrorInterceptor(this)(this._options.axios);
+    responseUpdateXMBXUsedWeight(this)(this._options.axios);
   }
 
   get options(): BinanceClientOptions {
     return this._options;
+  }
+
+  get axios() {
+    return this.options.axios;
   }
 
   get spotApiEndpoint() {

@@ -1,4 +1,4 @@
-import type { AxiosRequestConfig } from 'axios';
+import type { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { SocksProxyAgent } from 'socks-proxy-agent';
 
 export interface Proxy {
@@ -11,28 +11,35 @@ export interface Proxy {
 export function requestProxyInterceptor(
   getProxies: (Proxy | string)[] | (() => (Proxy | string)[] | Promise<(Proxy | string)[]>),
   proxyMaxRequestAttempt?: number,
-): (config: AxiosRequestConfig) => AxiosRequestConfig | Promise<AxiosRequestConfig> {
+): (instance: AxiosInstance) => () => void {
   getProxies = getProxies || [];
   proxyMaxRequestAttempt = proxyMaxRequestAttempt || 5;
 
   let lastProxyUsed = 0;
-  return async (config) => {
-    const proxies = typeof getProxies === 'function' ? await getProxies() : getProxies;
-    if (lastProxyUsed >= proxies.length) lastProxyUsed = 0;
 
-    const proxy = proxies[lastProxyUsed];
-    if (!proxy) return config;
+  return (instance) => {
+    const id = instance.interceptors.request.use(async (config) => {
+      const proxies = typeof getProxies === 'function' ? await getProxies() : getProxies;
+      if (lastProxyUsed >= proxies.length) lastProxyUsed = 0;
 
-    const { host, port, login, password } = typeof proxy === 'string' ? parseProxyAddress(proxy) : proxy;
-    lastProxyUsed++;
+      const proxy = proxies[lastProxyUsed];
+      if (!proxy) return config;
 
-    config.httpsAgent = new SocksProxyAgent({
-      host,
-      port,
-      auth: login && [login, password].filter(Boolean).join(':'),
+      const { host, port, login, password } = typeof proxy === 'string' ? parseProxyAddress(proxy) : proxy;
+      lastProxyUsed++;
+
+      config.httpsAgent = new SocksProxyAgent({
+        host,
+        port,
+        auth: login && [login, password].filter(Boolean).join(':'),
+      });
+
+      return config;
     });
 
-    return config;
+    return () => {
+      instance.interceptors.request.eject(id);
+    };
   };
 }
 

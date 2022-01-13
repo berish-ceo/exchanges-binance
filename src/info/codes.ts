@@ -42,19 +42,29 @@ export enum BinanceErrorCodes {
   REJECTED_MBX_KEY = -2015,
 }
 
-// export interface BinanceError extends Error {
-//   code: BinanceErrorCodes;
-//   message: string;
-// }
-
 export class BinanceError extends Error {
   code: BinanceErrorCodes;
+  headers: [string, string][];
 
-  constructor(message: string, code: number) {
+  static getBinanceErrorFromData(data: { [key: string]: any } | string, url: string, headers?: [string, string][]) {
+    try {
+      const json = typeof data === 'string' ? JSON.parse(data) : data;
+      return new BinanceError(json.msg || url, json.code, headers);
+    } catch (e) {
+      return new BinanceError(url, 0, headers);
+    }
+  }
+
+  static UnknownError() {
+    return new BinanceError('Unknown error', 0);
+  }
+
+  constructor(message: string, code: number, headers?: [string, string][]) {
     super(message);
 
     this.name = 'BinanceError';
     this.message = message;
     this.code = code;
+    this.headers = headers || [];
   }
 }

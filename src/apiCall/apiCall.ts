@@ -1,7 +1,5 @@
+import { BinanceError } from '..';
 import { BinanceClient, BinanceKeyClient, BinanceSignedClient } from '../clients';
-import { CONST } from '../info';
-import { resolveHeaders, updateXMBXUsedWeightAfterCall } from '../utils';
-import { tryAttempts } from '../utils/tryAttempts';
 
 import { apiKeyCall } from './apiKeyCall';
 import { apiSecretCall } from './apiSecretCall';
@@ -130,25 +128,28 @@ export function apiCall<TResponse>(
 
   if (options.securityType === 'NONE') {
     return publicCall<TResponse>({
+      axios: options.client.axios,
       host,
       path: options.path,
       method: options.method,
       data: options.data,
-    }).then(updateXMBXUsedWeightAfterCall(options.client));
+    });
   }
 
   if (options.securityType === 'USER_STREAM' || options.securityType === 'MARKET_DATA') {
     return apiKeyCall<TResponse>({
+      axios: options.client.axios,
       host,
       path: options.path,
       method: options.method,
       data: options.data,
       apiKey: options.client.apiKey,
-    }).then(updateXMBXUsedWeightAfterCall(options.client));
+    });
   }
 
   if (options.securityType === 'TRADE' || options.securityType === 'MARGIN' || options.securityType === 'USER_DATA') {
     return apiSecretCall<TResponse>({
+      axios: options.client.axios,
       host,
       path: options.path,
       method: options.method,
@@ -159,10 +160,10 @@ export function apiCall<TResponse>(
 
       noTimestamp: options.noTimestamp,
       noSignature: options.noSignature,
-    }).then(updateXMBXUsedWeightAfterCall(options.client));
+    });
   }
 
-  throw new TypeError('apiCall something is wrong');
+  throw BinanceError.UnknownError();
 }
 
 function getHost(client: BinanceClient, host: ApiCallHostType, isSocket: boolean): string {
