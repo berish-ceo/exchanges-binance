@@ -1,6 +1,7 @@
 import type { spot, XOR } from '../..';
 
-export type NewOCOPayload<ResponseType extends spot.OrderResponseType = spot.OrderResponseType> = NewOCOBasePayload<ResponseType> & NewOCOStopLimitPayload;
+export type NewOCOPayload<ResponseType extends spot.OrderResponseType = spot.OrderResponseType> =
+  NewOCOBasePayload<ResponseType> & NewOCOStopLimitPayload;
 
 export interface NewOCOBasePayload<OrderResponseType extends spot.OrderResponseType = spot.OrderResponseType> {
   symbol: string;

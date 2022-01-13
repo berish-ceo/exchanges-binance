@@ -12,7 +12,8 @@ export class BinanceSignedClient extends BinanceKeyClient {
     super(options);
 
     if (!options) throw new TypeError('BinanceSignedClientOptions constructor options is empty');
-    if (typeof options !== 'object') throw new TypeError('BinanceSignedClientOptions constructor options is not object');
+    if (typeof options !== 'object')
+      throw new TypeError('BinanceSignedClientOptions constructor options is not object');
 
     if (!options.apiSecret) throw new TypeError('BinanceSignedClientOptions constructor options.apiSecret is empty');
 

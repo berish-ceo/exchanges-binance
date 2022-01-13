@@ -1,6 +1,10 @@
 import LINQ from '@berish/linq';
 
-export function resolveHeaders(headers: [string, string][], headersGet?: string[], mode: 'startWith' | 'strict' = 'startWith') {
+export function resolveHeaders(
+  headers: [string, string][],
+  headersGet?: string[],
+  mode: 'startWith' | 'strict' = 'startWith',
+) {
   headers = headers || [];
   if (!headersGet) return headers;
 

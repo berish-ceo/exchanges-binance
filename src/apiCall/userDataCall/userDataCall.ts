@@ -42,7 +42,13 @@ export function userDataCall(options: UserDataCallOptions, callback: (data: any,
       }
 
       if (currentListenKey) {
-        await closeListenKey({ client: options.client, host: options.host, path: options.path, listenKey: currentListenKey, data: options.data });
+        await closeListenKey({
+          client: options.client,
+          host: options.host,
+          path: options.path,
+          listenKey: currentListenKey,
+          data: options.data,
+        });
         currentListenKey = null;
       }
 
@@ -62,7 +68,13 @@ export function userDataCall(options: UserDataCallOptions, callback: (data: any,
     if (!currentListenKey) return void 0;
 
     try {
-      await pingListenKey({ client: options.client, host: options.host, path: options.path, listenKey: currentListenKey, data: options.data });
+      await pingListenKey({
+        client: options.client,
+        host: options.host,
+        path: options.path,
+        listenKey: currentListenKey,
+        data: options.data,
+      });
     } catch (err) {
       // Ключа больше не существует, если снаружи не было вызвано отключение,
       // то мы должны переподключиться
@@ -72,8 +84,16 @@ export function userDataCall(options: UserDataCallOptions, callback: (data: any,
 
   const create = async (throwError: boolean) => {
     try {
-      currentListenKey = await createListenKey({ client: options.client, host: options.host, path: options.path, data: options.data });
-      currentUnlistener = apiCall({ client: options.client, host: options.host, path: currentListenKey, securityType: 'SOCKET' }, callback);
+      currentListenKey = await createListenKey({
+        client: options.client,
+        host: options.host,
+        path: options.path,
+        data: options.data,
+      });
+      currentUnlistener = apiCall(
+        { client: options.client, host: options.host, path: currentListenKey, securityType: 'SOCKET' },
+        callback,
+      );
       currentInterval = setInterval(() => ping(), options.client.userDataStreamPingInterval);
     } catch (err) {
       if (throwError) throw err;

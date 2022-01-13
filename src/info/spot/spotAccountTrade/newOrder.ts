@@ -1,18 +1,19 @@
 import type { spot } from '../../..';
 import type { RefType, XORArray, XOR } from '../../utils';
 
-export type NewOrderPayload<OrderResponseType extends spot.OrderResponseType = spot.OrderResponseType> = NewOrderBasePayload<OrderResponseType> &
-  XORArray<
-    [
-      NewOrderLimitPayload,
-      NewOrderMarketPayload,
-      NewOrderStopLossPayload,
-      NewOrderStopLossLimitPayload,
-      NewOrderTakeProfitPayload,
-      NewOrderTakeProfitLimitPayload,
-      NewOrderLimitMakerPayload,
-    ]
-  >;
+export type NewOrderPayload<OrderResponseType extends spot.OrderResponseType = spot.OrderResponseType> =
+  NewOrderBasePayload<OrderResponseType> &
+    XORArray<
+      [
+        NewOrderLimitPayload,
+        NewOrderMarketPayload,
+        NewOrderStopLossPayload,
+        NewOrderStopLossLimitPayload,
+        NewOrderTakeProfitPayload,
+        NewOrderTakeProfitLimitPayload,
+        NewOrderLimitMakerPayload,
+      ]
+    >;
 
 export interface NewOrderBasePayload<OrderResponseType extends spot.OrderResponseType = spot.OrderResponseType> {
   symbol: string;

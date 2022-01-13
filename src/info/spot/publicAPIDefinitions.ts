@@ -1,20 +1,56 @@
-export type SymbolStatus = 'PRE_TRADING' | 'TRADING' | 'POST_TRADING' | 'END_OF_DAY' | 'HALT' | 'AUCTION_MATCH' | 'BREAK';
+export type SymbolStatus =
+  | 'PRE_TRADING'
+  | 'TRADING'
+  | 'POST_TRADING'
+  | 'END_OF_DAY'
+  | 'HALT'
+  | 'AUCTION_MATCH'
+  | 'BREAK';
 export type SymbolType = 'SPOT';
 
 export type ExecutionType = 'NEW' | 'CANCELED' | 'REPLACED' | 'REJECTED' | 'TRADE' | 'EXPIRED';
-export type OrderStatus = 'NEW' | 'PARTIALLY_FILLED' | 'FILLED' | 'CANCELED' | 'PENDING_CANCEL' | 'REJECTED' | 'EXPIRED';
+export type OrderStatus =
+  | 'NEW'
+  | 'PARTIALLY_FILLED'
+  | 'FILLED'
+  | 'CANCELED'
+  | 'PENDING_CANCEL'
+  | 'REJECTED'
+  | 'EXPIRED';
 export type OCOStatus = 'RESPONSE' | 'EXEC_STARTED' | 'ALL_DONE';
 export type OCOOrderStatus = 'EXECUTING' | 'ALL_DONE' | 'REJECT';
 
 export type ContingencyType = 'OCO';
 
-export type OrderType = 'LIMIT' | 'MARKET' | 'STOP_LOSS' | 'STOP_LOSS_LIMIT' | 'TAKE_PROFIT' | 'TAKE_PROFIT_LIMIT' | 'LIMIT_MAKER';
+export type OrderType =
+  | 'LIMIT'
+  | 'MARKET'
+  | 'STOP_LOSS'
+  | 'STOP_LOSS_LIMIT'
+  | 'TAKE_PROFIT'
+  | 'TAKE_PROFIT_LIMIT'
+  | 'LIMIT_MAKER';
 export type OrderResponseType = 'ACK' | 'RESULT' | 'FULL';
 export type OrderSide = 'BUY' | 'SELL';
 
 export type TimeInForce = 'GTC' | 'IOC' | 'FOK';
 
-export type KlineCandlestickChartIntervals = '1m' | '3m' | '5m' | '15m' | '30m' | '1h' | '2h' | '4h' | '6h' | '8h' | '12h' | '1d' | '3d' | '1w' | '1M';
+export type KlineCandlestickChartIntervals =
+  | '1m'
+  | '3m'
+  | '5m'
+  | '15m'
+  | '30m'
+  | '1h'
+  | '2h'
+  | '4h'
+  | '6h'
+  | '8h'
+  | '12h'
+  | '1d'
+  | '3d'
+  | '1w'
+  | '1M';
 
 export type RateLimiters = 'REQUEST_WEIGHT' | 'ORDERS' | 'RAW_REQUESTS';
 export type RateLimitIntervals = 'SECOND' | 'MINUTE' | 'DAY';
@@ -79,7 +115,13 @@ export enum SubAccountTransferTypeEnum {
 
 export type TransferAccountType = 'SPOT' | 'USDT_FUTURE' | 'COIN_FUTURE';
 
-export type FlexibleProductStatusType = 'ALL' | 'SUBSCRIBABLE' | 'UNSUBSCRIBABLE' | 'HOLDING' | 'REDEEMED' | 'PURCHASING';
+export type FlexibleProductStatusType =
+  | 'ALL'
+  | 'SUBSCRIBABLE'
+  | 'UNSUBSCRIBABLE'
+  | 'HOLDING'
+  | 'REDEEMED'
+  | 'PURCHASING';
 export type FlexibleProductType = 'ACTIVITY' | 'CUSTOMIZED_FIXED';
 export type FlexibleSortByType = 'START_TIME' | 'LOT_SIZE' | 'INTEREST_RATE' | 'DURATION';
 export type FlexibleLendingType = 'DAILY' | 'ACTIVITY' | 'CUSTOMIZED_FIXED';

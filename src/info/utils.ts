@@ -5,4 +5,8 @@ export type XOR<T, U> = T | U extends object ? (ExcludeObject<T, U> & U) | (Excl
 export type Head<T> = T extends [infer U, ...any[]] ? U : T;
 export type Tail<T> = T extends [any, ...infer U] ? (U extends [infer I] ? I : U extends [] ? never : U) : T;
 
-export type XORArray<T extends any[]> = T extends [infer U] ? U : T extends [] ? never : XOR<Head<T>, Tail<T> extends any[] ? XORArray<Tail<T>> : Tail<T>>;
+export type XORArray<T extends any[]> = T extends [infer U]
+  ? U
+  : T extends []
+  ? never
+  : XOR<Head<T>, Tail<T> extends any[] ? XORArray<Tail<T>> : Tail<T>>;

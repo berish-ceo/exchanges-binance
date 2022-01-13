@@ -2,7 +2,11 @@ import { BinanceKeyClient } from '../../../clients';
 import { apiCall } from '../../../apiCall';
 import { UserDataResponseRaw, UserDataResponse, parseUserData } from './parsers';
 
-export function listenIsolatedMargin(client: BinanceKeyClient, symbol: string, callback: (data: UserDataResponse, error?: any) => any) {
+export function listenIsolatedMargin(
+  client: BinanceKeyClient,
+  symbol: string,
+  callback: (data: UserDataResponse, error?: any) => any,
+) {
   if (!symbol) throw new TypeError('listenIsolatedMargin symbol is empty');
   if (typeof symbol !== 'string') throw new TypeError('listenIsolatedMargin symbol is not string');
 

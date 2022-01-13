@@ -5,7 +5,13 @@ export enum ModifyIsolatedPositionMarginTypeEnum {
   REDUCE_POSITION_MARGIN = 2,
 }
 
-export type IncomeType = 'TRANSFER' | 'WELCOME_BONUS' | 'REALIZED_PNL' | 'FUNDING_FEE' | 'COMMISSION' | 'INSURANCE_CLEAR';
+export type IncomeType =
+  | 'TRANSFER'
+  | 'WELCOME_BONUS'
+  | 'REALIZED_PNL'
+  | 'FUNDING_FEE'
+  | 'COMMISSION'
+  | 'INSURANCE_CLEAR';
 
 export type AutoCloseType = 'LIQUIDATION' | 'ADL';
 
