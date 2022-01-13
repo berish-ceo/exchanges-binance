@@ -6,17 +6,15 @@ export interface RequestOptions {
   url: string;
   method: Method;
   headers: HeadersInit;
-  httpsAgent: any;
 }
 
 export async function request<Result>(options: RequestOptions): Promise<ResolveResponseOutput<Result>> {
-  const { url, method, headers, httpsAgent } = options;
+  const { url, method, headers } = options;
 
   try {
     const response = await axios(url, {
-      method: method,
-      headers: headers,
-      httpsAgent,
+      method,
+      headers,
     });
 
     if (!response) throw new TypeError('resolveResponse response is empty');
@@ -25,7 +23,10 @@ export async function request<Result>(options: RequestOptions): Promise<ResolveR
     const data = response.data || ({} as Result);
 
     if (response.status !== 200 || ('success' in data && !data['success']))
-      return { headers: responseHeaders, error: resolveError(JSON.stringify(response.data), response.status, response.statusText) };
+      return {
+        headers: responseHeaders,
+        error: resolveError(JSON.stringify(response.data), response.status, response.statusText),
+      };
 
     return { headers: responseHeaders, data };
   } catch (err: any) {
@@ -35,7 +36,10 @@ export async function request<Result>(options: RequestOptions): Promise<ResolveR
       const responseHeaders: [string, string][] = Object.entries(response.headers);
       const data = response.data || ({} as Result);
 
-      return { headers: responseHeaders, error: resolveError(JSON.stringify(data), response.status, response.statusText) };
+      return {
+        headers: responseHeaders,
+        error: resolveError(JSON.stringify(data), response.status, response.statusText),
+      };
     }
     if (config) return { headers: [], error: resolveError(config.url, null, null) };
 

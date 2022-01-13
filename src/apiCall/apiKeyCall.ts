@@ -1,4 +1,3 @@
-import { BinanceProxy } from '../clients';
 import { publicCall, PublicCallOptions } from './publicCall';
 
 export interface ApiKeyCallOptions extends PublicCallOptions {

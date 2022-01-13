@@ -51,11 +51,16 @@ export interface ApiCallClientUserDataOptions {
   data?: { [name: string]: any };
 }
 
-export type ApiCallOptions = ApiCallBaseOptions & ApiCallDataOptions & (ApiCallClientPublicOptions | ApiCallClientKeyOptions | ApiCallClientSignedOptions);
+export type ApiCallOptions = ApiCallBaseOptions &
+  ApiCallDataOptions &
+  (ApiCallClientPublicOptions | ApiCallClientKeyOptions | ApiCallClientSignedOptions);
 export type ApiCallCallbackOptions = ApiCallBaseOptions & (ApiCallClientSocketOptions | ApiCallClientUserDataOptions);
 
 export function apiCall<TResponse>(options: ApiCallOptions): Promise<TResponse>;
-export function apiCall<TResponse>(options: ApiCallCallbackOptions, callback: (data: TResponse, error?: any) => any): () => any;
+export function apiCall<TResponse>(
+  options: ApiCallCallbackOptions,
+  callback: (data: TResponse, error?: any) => any,
+): () => any;
 export function apiCall<TResponse>(
   options: ApiCallOptions | ApiCallCallbackOptions,
   callback?: (data: TResponse, error?: any) => any,
@@ -81,10 +86,15 @@ export function apiCall<TResponse>(
   )
     throw new TypeError('apiCall options.type is not correct');
 
-  if ((options.securityType === 'NONE' || options.securityType === 'SOCKET') && !(options.client instanceof BinanceClient))
+  if (
+    (options.securityType === 'NONE' || options.securityType === 'SOCKET') &&
+    !(options.client instanceof BinanceClient)
+  )
     throw new TypeError('apiCall options.client is not BinanceClient');
   if (
-    (options.securityType === 'USER_STREAM' || options.securityType === 'USER_DATA_STREAM' || options.securityType === 'MARKET_DATA') &&
+    (options.securityType === 'USER_STREAM' ||
+      options.securityType === 'USER_DATA_STREAM' ||
+      options.securityType === 'MARKET_DATA') &&
     !(options.client instanceof BinanceKeyClient)
   )
     throw new TypeError('apiCall options.client is not BinanceKeyClient');
@@ -104,7 +114,10 @@ export function apiCall<TResponse>(
     }
 
     if (options.securityType === 'USER_DATA_STREAM') {
-      return userDataCall({ client: options.client, host: options.host, path: options.path, data: options.data }, callback);
+      return userDataCall(
+        { client: options.client, host: options.host, path: options.path, data: options.data },
+        callback,
+      );
     }
   }
 
@@ -116,48 +129,37 @@ export function apiCall<TResponse>(
   const host = getHost(options.client, options.host, false);
 
   if (options.securityType === 'NONE') {
-    return tryAttempts(
-      () =>
-        publicCall<TResponse>({ host, path: options.path, method: options.method, data: options.data, proxy: options.client.getProxy() }).then(
-          updateXMBXUsedWeightAfterCall(options.client),
-        ),
-      options.client.proxyServers.length > 0 ? options.client.proxyMaxRequestAttempt : 1,
-    );
+    return publicCall<TResponse>({
+      host,
+      path: options.path,
+      method: options.method,
+      data: options.data,
+    }).then(updateXMBXUsedWeightAfterCall(options.client));
   }
 
   if (options.securityType === 'USER_STREAM' || options.securityType === 'MARKET_DATA') {
-    return tryAttempts(
-      () =>
-        apiKeyCall<TResponse>({
-          host,
-          path: options.path,
-          method: options.method,
-          data: options.data,
-          apiKey: options.client.apiKey,
-          proxy: options.client.getProxy(),
-        }).then(updateXMBXUsedWeightAfterCall(options.client)),
-      options.client.proxyServers.length > 0 ? options.client.proxyMaxRequestAttempt : 1,
-    );
+    return apiKeyCall<TResponse>({
+      host,
+      path: options.path,
+      method: options.method,
+      data: options.data,
+      apiKey: options.client.apiKey,
+    }).then(updateXMBXUsedWeightAfterCall(options.client));
   }
 
   if (options.securityType === 'TRADE' || options.securityType === 'MARGIN' || options.securityType === 'USER_DATA') {
-    return tryAttempts(
-      () =>
-        apiSecretCall<TResponse>({
-          host,
-          path: options.path,
-          method: options.method,
-          data: options.data,
-          apiKey: options.client.apiKey,
-          apiSecret: options.client.apiSecret,
-          getTime: options.client.getTime,
+    return apiSecretCall<TResponse>({
+      host,
+      path: options.path,
+      method: options.method,
+      data: options.data,
+      apiKey: options.client.apiKey,
+      apiSecret: options.client.apiSecret,
+      getTime: options.client.getTime,
 
-          noTimestamp: options.noTimestamp,
-          noSignature: options.noSignature,
-          proxy: options.client.getProxy(),
-        }).then(updateXMBXUsedWeightAfterCall(options.client)),
-      options.client.proxyServers.length > 0 ? options.client.proxyMaxRequestAttempt : 1,
-    );
+      noTimestamp: options.noTimestamp,
+      noSignature: options.noSignature,
+    }).then(updateXMBXUsedWeightAfterCall(options.client));
   }
 
   throw new TypeError('apiCall something is wrong');

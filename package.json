@@ -34,6 +34,7 @@
   "scripts": {
     "test": "jest --config jestconfig.json",
     "test:dev": "jest --config jestconfig.json --watch --verbose=false",
+    "watch": "tsc -p . -w",
     "build": "tsc -p .",
     "format": "prettier --write \"src/**/*.(t|j)s\"",
     "lint": "tslint -p tsconfig.json",

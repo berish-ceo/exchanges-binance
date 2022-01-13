@@ -1,6 +1,5 @@
 import { SocksProxyAgent } from 'socks-proxy-agent';
 
-import { BinanceProxy } from '../clients';
 import { getPath, request, ResolveResponseOutput } from '../utils';
 
 export interface PublicCallOptions {
@@ -11,7 +10,6 @@ export interface PublicCallOptions {
   data?: { [name: string]: any };
 
   headers?: HeadersInit;
-  proxy?: BinanceProxy;
 }
 
 export async function publicCall<TResponse>(options: PublicCallOptions): Promise<ResolveResponseOutput<TResponse>> {
@@ -24,15 +22,11 @@ export async function publicCall<TResponse>(options: PublicCallOptions): Promise
 
   const requestPath = getPath({ host: options.host, path: options.path, data: options.data });
 
-  const httpsAgent =
-    options.proxy &&
-    new SocksProxyAgent({
-      host: options.proxy.host,
-      port: options.proxy.port,
-      auth: options.proxy.login && [options.proxy.login, options.proxy.password].filter(Boolean).join(':'),
-    });
-
-  const response = await request<TResponse>({ url: requestPath, method: options.method, headers: options.headers, httpsAgent });
+  const response = await request<TResponse>({
+    url: requestPath,
+    method: options.method,
+    headers: options.headers,
+  });
 
   return response;
 }
