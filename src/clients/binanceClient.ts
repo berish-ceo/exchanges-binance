@@ -1,10 +1,8 @@
-import { numberParser, parse } from '@berish/safe-parsing';
 import axios, { AxiosInstance } from 'axios';
 
 import { spotMarginSavingsMaining } from '../api';
 import { CONST } from '../info';
 import { responseErrorInterceptor, responseUpdateXMBXUsedWeight } from '../interceptors';
-import { parseProxyAddress } from '../utils';
 
 export interface BinanceClientOptions {
   spotApiEndpoint?: string;
@@ -37,7 +35,7 @@ export class BinanceClient {
     this._options.coinFuturesSocketEndpoint = this._options.coinFuturesSocketEndpoint || CONST.COINM_HOSTS.socketHost;
     this._options.vanillaApiEndpoint = this._options.vanillaApiEndpoint || CONST.VANILLA_HOSTS.baseHost;
     this._options.vanillaSocketEndpoint = this._options.vanillaSocketEndpoint || CONST.VANILLA_HOSTS.socketHost;
-    this._options.axios = axios.create({ timeout: 10000 });
+    this._options.axios = this._options.axios || axios.create({ timeout: 10000 });
 
     responseErrorInterceptor(this)(this._options.axios);
     responseUpdateXMBXUsedWeight(this)(this._options.axios);
